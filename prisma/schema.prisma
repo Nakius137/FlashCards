@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// npx prisma migrate dev --name init
+// npx prisma generate
+
+model User {
+  id            Int             @id @default(autoincrement())
+  Email         String          @unique
+  Name          String          @unique
+  Passowrd      String
+  UsersSets     Set[]           @relation("author")
+  CreatedBySets Set[]           @relation("subscribers")
+  UsersProgress UsersProgress[]
+}
+
+model Set {
+  id            Int             @id @default(autoincrement())
+  Name          String          @unique
+  Author        User            @relation(fields: [AuthorId], references: [id], name: "author")
+  AuthorId      Int
+  Subscribers   User            @relation(fields: [SubscriberId], references: [id], name: "subscribers")
+  SubscriberId  Int
+  Words         Words[]
+  UsersProgress UsersProgress[]
+}
+
+model Words {
+  id             Int    @id @default(autoincrement())
+  OriginalWord   String
+  TranslatedWord String
+  BelongTo       Set    @relation(fields: [SetId], references: [id])
+  SetId          Int
+}
+
+model UsersProgress {
+  id     Int  @id @default(autoincrement())
+  User   User @relation(fields: [UserId], references: [id])
+  UserId Int
+  Set    Set  @relation(fields: [SetId], references: [id])
+  SetId  Int
+  Progress Int 
+}
