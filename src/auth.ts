@@ -1,10 +1,14 @@
-import NextAuth, { User } from "next-auth";
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { ZodError } from "zod";
-import { signInSchema } from "./lib/zod";
-import { getUserFromDB } from "./lib/utils";
+import { db } from "./lib/prismaClient";
+//@ts-ignore
+import bcryptjs from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  pages: {
+    signIn: "/signin",
+  },
   providers: [
     Credentials({
       credentials: {
@@ -12,16 +16,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
+        if (
+          typeof credentials.email !== "string" ||
+          typeof credentials.password !== "string"
+        ) {
+          return null;
+        }
         try {
-          let user = null;
-          const { email, password } = await signInSchema.parseAsync(
-            credentials
-          );
-
-          user = await getUserFromDB(email, password);
+          const user = await db.user.findFirst({
+            where: { Email: credentials.email },
+          });
 
           if (!user) {
-            throw new Error("User not found");
+            return null;
+          }
+
+          const isValidPassword = await bcryptjs.compare(
+            credentials.password,
+            user.Passowrd
+          );
+
+          if (!isValidPassword) {
+            return null;
           }
 
           return user as any;
