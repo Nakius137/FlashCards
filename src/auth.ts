@@ -2,7 +2,6 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { ZodError } from "zod";
 import { db } from "./lib/prismaClient";
-//@ts-ignore
 import bcryptjs from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({

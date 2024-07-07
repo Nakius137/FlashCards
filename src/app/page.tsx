@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import CustomButton from "@/components/CustomButton";
 
 export default function Home() {
   return (
@@ -6,13 +6,19 @@ export default function Home() {
       <div>
         <h1 className="text-white text-[55px] text-center">FlashCard</h1>
         <div className="flex items-center justify-center">
-          <Button size="lg" className="text-[17.5px]">
-            Sign in
-          </Button>
+          <CustomButton
+            size="lg"
+            className="text-[17.5px]"
+            text="Sign in"
+            path="/signin"
+          />
           <span className="p-2"></span>
-          <Button size="lg" className="text-[17.5px]">
-            Sign up
-          </Button>
+          <CustomButton
+            size="lg"
+            className="text-[17.5px]"
+            text="Sign up"
+            path="/signup"
+          />
         </div>
       </div>
     </main>
