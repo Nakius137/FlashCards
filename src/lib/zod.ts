@@ -15,8 +15,8 @@ export const signUpSchema = object({
     .min(1, "Email is required")
     .email("Invalid email"),
   username: string({ required_error: "Username is required " }).min(
-    1,
-    "Username is required"
+    8,
+    "Username is too short"
   ),
   password: string({ required_error: "Password is required" })
     .min(1, "Password is required")

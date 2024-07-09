@@ -3,8 +3,10 @@
 import { signIn } from "@/auth";
 import { redirect } from "next/navigation";
 import { FormState } from "../(nav)/signin/page";
+import { db } from "@/lib/prismaClient";
+import bcryptjs from "bcryptjs";
 
-export const onSubmitAction = async (prevState: FormState, data: FormData) => {
+export const onSignInAction = async (prevState: FormState, data: FormData) => {
   try {
     await signIn("credentials", {
       email: data.get("email"),
@@ -17,4 +19,21 @@ export const onSubmitAction = async (prevState: FormState, data: FormData) => {
   redirect("/main");
 };
 
-export const registerUserInDB = async () => {};
+export const onSignUpAction = async (prevState: FormState, data: FormData) => {
+  const salt = 12;
+  const usersPassword = data.get("password") as string;
+  const hashedPassword = await bcryptjs.hash(usersPassword, salt);
+
+  try {
+    db.user.create({
+      data: {
+        Email: data.get("email") as string,
+        Passowrd: hashedPassword,
+        Name: data.get("username") as string,
+      },
+    });
+  } catch (err) {
+    return { message: JSON.stringify(err) };
+  }
+  redirect("/main");
+};

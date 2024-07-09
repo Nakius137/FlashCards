@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { onSubmitAction } from "@/app/_actions/index";
+import { onSignInAction } from "@/app/_actions/index";
 import { useFormState } from "react-dom";
 import { useRef } from "react";
 import { Card } from "@/components/ui/card";
@@ -26,7 +26,7 @@ export type FormState = {
 
 export default function SignIn() {
   //@ts-ignore
-  const [state, formAction] = useFormState<FormState>(onSubmitAction, {
+  const [state, formAction] = useFormState<FormState>(onSignInAction, {
     message: "",
   });
 

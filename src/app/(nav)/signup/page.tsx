@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { onSubmitAction } from "@/app/_actions/index";
+import { onSignUpAction } from "@/app/_actions/index";
 import { useFormState } from "react-dom";
 import { useRef } from "react";
 import { Card } from "@/components/ui/card";
@@ -23,7 +23,7 @@ export type SignUp = z.infer<typeof signUpSchema>;
 
 export default function SignUp() {
   //@ts-ignore
-  const [state, formAction] = useFormState<FormState>(onSubmitAction, {
+  const [state, formAction] = useFormState<FormState>(onSignUpAction, {
     message: "",
   });
 
