@@ -18,6 +18,8 @@ import { onSignInAction } from "@/app/_actions/index";
 import { useFormState } from "react-dom";
 import { useRef } from "react";
 import { Card } from "@/components/ui/card";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Terminal } from "lucide-react";
 
 export type SignIn = z.infer<typeof signInSchema>;
 export type FormState = {
@@ -88,7 +90,13 @@ export default function SignIn() {
                 </FormItem>
               )}
             />
-            {state && <div className="text-red-500">{state.message}</div>}
+            {state.message && (
+              <Alert>
+                <Terminal className="h-4 w-4" />
+                <AlertTitle>Error!</AlertTitle>
+                <AlertDescription>{state.message}</AlertDescription>
+              </Alert>
+            )}
             <Button className="flex justify-center" type="submit">
               Submit
             </Button>

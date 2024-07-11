@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import { ZodError } from "zod";
 import { db } from "./lib/prismaClient";
 import bcryptjs from "bcryptjs";
+import { NextResponse } from "next/server";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
@@ -10,6 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   providers: [
     Credentials({
+      name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email", placeholder: "jsmith@o2.com" },
         password: { label: "Password", type: "password" },
@@ -48,4 +50,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    authorized: async ({ request, auth }) => {
+      const { username, password } = request.nextUrl;
+
+      if (!username || !password) {
+        return NextResponse.redirect("localhost:3000");
+      }
+      return !!auth;
+    },
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+  },
 });

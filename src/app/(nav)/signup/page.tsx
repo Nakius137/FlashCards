@@ -18,6 +18,8 @@ import { onSignUpAction } from "@/app/_actions/index";
 import { useFormState } from "react-dom";
 import { useRef } from "react";
 import { Card } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Terminal } from "lucide-react";
 
 export type SignUp = z.infer<typeof signUpSchema>;
 
@@ -93,6 +95,7 @@ export default function SignUp() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
+                      type="password"
                       className="text-black"
                       placeholder="*********"
                       {...field}
@@ -102,7 +105,13 @@ export default function SignUp() {
                 </FormItem>
               )}
             />
-            {state && <div className="text-red-500">{state.message}</div>}
+            {state.message && (
+              <Alert>
+                <Terminal className="h-4 w-4" />
+                <AlertTitle>Error!</AlertTitle>
+                <AlertDescription>{state.message}</AlertDescription>
+              </Alert>
+            )}
             <Button className="flex justify-center" type="submit">
               Submit
             </Button>

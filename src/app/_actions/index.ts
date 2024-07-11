@@ -16,24 +16,43 @@ export const onSignInAction = async (prevState: FormState, data: FormData) => {
   } catch (err) {
     return { message: "Check your credentials" };
   }
-  redirect("/main");
+  redirect("/panel");
 };
 
 export const onSignUpAction = async (prevState: FormState, data: FormData) => {
-  const salt = 12;
+  const username = data.get("username") as string;
+  const email = data.get("email") as string;
   const usersPassword = data.get("password") as string;
+  const salt = 12;
   const hashedPassword = await bcryptjs.hash(usersPassword, salt);
 
   try {
-    db.user.create({
-      data: {
-        Email: data.get("email") as string,
-        Passowrd: hashedPassword,
-        Name: data.get("username") as string,
+    const isTaken = await db.user.findFirst({
+      where: {
+        OR: [
+          {
+            Email: email,
+          },
+          {
+            Name: username,
+          },
+        ],
       },
     });
+
+    if (!isTaken) {
+      db.user.create({
+        data: {
+          Email: email,
+          Passowrd: hashedPassword,
+          Name: username,
+        },
+      });
+    } else {
+      return { message: "User already exists" };
+    }
   } catch (err) {
     return { message: JSON.stringify(err) };
   }
-  redirect("/main");
+  redirect("/panel");
 };
