@@ -12,7 +12,10 @@ export default function Home() {
             text="Sign in"
             path="/signin"
           />
-          <span className="p-2"></span>
+          <span className="p-2"></span>{" "}
+          {
+            // CHANGE TO TAILWIND STYLE
+          }
           <CustomButton
             size="lg"
             className="text-[17.5px]"

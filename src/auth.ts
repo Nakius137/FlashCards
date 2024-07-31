@@ -6,6 +6,7 @@ import bcryptjs from "bcryptjs";
 import { NextResponse } from "next/server";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  session: { strategy: "jwt" },
   pages: {
     signIn: "/signin",
   },
@@ -51,19 +52,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    authorized: async ({ request, auth }) => {
-      const { username, password } = request.nextUrl;
+    authorized: async ({ auth }) => {
+      // if (!username || !password) {
+      //   return NextResponse.redirect("localhost:3000");
+      // }
 
-      if (!username || !password) {
-        return NextResponse.redirect("localhost:3000");
-      }
       return !!auth;
     },
-    jwt({ token, user }) {
+    jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
       }
       return token;
+    },
+    session: async ({ session, token }) => {
+      //TODO: Extend base type
+      session.user.id = token.id;
+      return session;
     },
   },
 });

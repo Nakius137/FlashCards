@@ -31,7 +31,7 @@ model Set {
   Name          String          @unique
   Author        User            @relation(fields: [AuthorId], references: [id], name: "author")
   AuthorId      Int
-  Subscribers   User            @relation(fields: [SubscriberId], references: [id], name: "subscribers")
+  Subscribers   User          @relation(fields: [SubscriberId], references: [id], name: "subscribers")
   SubscriberId  Int
   Words         Words[]
   UsersProgress UsersProgress[]

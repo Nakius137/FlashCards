@@ -16,7 +16,7 @@ export const onSignInAction = async (prevState: FormState, data: FormData) => {
   } catch (err) {
     return { message: "Check your credentials" };
   }
-  redirect("/panel");
+  redirect("/dashboard");
 };
 
 export const onSignUpAction = async (prevState: FormState, data: FormData) => {
@@ -41,7 +41,7 @@ export const onSignUpAction = async (prevState: FormState, data: FormData) => {
     });
 
     if (!isTaken) {
-      db.user.create({
+      await db.user.create({
         data: {
           Email: email,
           Passowrd: hashedPassword,
@@ -54,5 +54,5 @@ export const onSignUpAction = async (prevState: FormState, data: FormData) => {
   } catch (err) {
     return { message: JSON.stringify(err) };
   }
-  redirect("/panel");
+  redirect("/dashboard");
 };

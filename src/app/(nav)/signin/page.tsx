@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { onSignInAction } from "@/app/_actions/index";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -31,6 +31,7 @@ export default function SignIn() {
   const [state, formAction] = useFormState<FormState>(onSignInAction, {
     message: "",
   });
+  const { pending } = useFormStatus();
 
   const form = useForm<SignIn>({
     resolver: zodResolver(signInSchema),
@@ -97,7 +98,11 @@ export default function SignIn() {
                 <AlertDescription>{state.message}</AlertDescription>
               </Alert>
             )}
-            <Button className="flex justify-center" type="submit">
+            <Button
+              className="flex justify-center"
+              type="submit"
+              disabled={pending}
+            >
               Submit
             </Button>
           </form>
